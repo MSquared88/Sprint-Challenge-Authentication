@@ -63,12 +63,15 @@ describe('server endpoints test', () => {
 		})
 
 		describe('POST /api/auth/login',() => {
-			
+
+			beforeEach(async () => {
+				await db('users').truncate();
+			});
 			it('should return status 401 if username and password are not valid', async () => {
 			
 			const login = await request(server)
 			.post('/api/auth/login')
-			.send({ username: 'fail', password: '123' })
+			.send({ username: 'fail', password: 'fail' })
 
 			expect(login.status).toBe(401)
 			})
@@ -77,9 +80,21 @@ describe('server endpoints test', () => {
 			
 				const login = await request(server)
 				.post('/api/auth/login')
-				.send({ username: 'fail', password: '123' })
+				.send({ username: 'fail', password: 'fail' })
 	
 				expect(login.body).toEqual({message: "You shall not pass!!"})
+				})
+
+			it('should return  "message": "Welcome username!", if username and password are valid', async () => {
+				const user = await request(server)
+				.post('/api/auth/register')
+				.send({ username: 'matthew', password: '123' })
+
+				const login = await request(server)
+				.post('/api/auth/login')
+				.send({ username: 'matthew', password: '123' })
+	
+				expect(login.body.message).toEqual(`Welcome matthew!`)
 				})
 		})
 	})

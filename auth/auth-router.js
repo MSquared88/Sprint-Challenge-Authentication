@@ -26,8 +26,6 @@ router.post('/register', (req, res) => {
       res.status(500).json({message: "user could not be added to the database", err})
     })
   }
-
-
 });
 
 router.post('/login', (req, res) => {
@@ -50,7 +48,6 @@ router.post('/login', (req, res) => {
 	.catch(error => {
 		res.status(500).json({message: "could not login user", error});
 	});
-  
 });
 
 module.exports = router;
